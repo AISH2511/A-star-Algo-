@@ -47,6 +47,7 @@ class A_star{
         }        
     });
     double finaldist = 0.0;
+    ArrayList<City> arraypath = new ArrayList<City>();
     public double searchAStar(City source, City dest, ArrayList<City> allCities){
         for(City town: allCities){
             town.setHdist(dest);
@@ -57,6 +58,8 @@ class A_star{
         while(!pathq.isEmpty()){
             City current = pathq.poll();
             finaldist = current.g_dist;
+            /*Storing IDs for printing path*/
+            arraypath.add(current);
             if(current.id==dest.id){
                 break;
             }
@@ -91,13 +94,15 @@ class Dijkstra{
         }        
     });
   double finaldist = 0.0;
+  ArrayList<City> arraypath = new ArrayList<City>();
     public double searchDijkstra(City source, City dest){
         source.g_dist = 0;
         pathq.add(source);
         while(!pathq.isEmpty()){
             City current = pathq.poll();
             finaldist = current.g_dist;
-            System.out.println(current.id + " ");
+            /*Storing IDs for printing path*/
+            arraypath.add(current);
             if(current.id==dest.id){
                 break;
             }
