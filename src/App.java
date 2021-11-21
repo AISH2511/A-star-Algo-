@@ -94,23 +94,19 @@ class Dijkstra{
     public double searchDijkstra(City source, City dest){
         source.g_dist = 0;
         pathq.add(source);
-        System.out.println("hi");
         while(!pathq.isEmpty()){
-        	System.out.println("hi0");
             City current = pathq.poll();
             finaldist = current.g_dist;
+            System.out.println(current.id + " ");
             if(current.id==dest.id){
-            	System.out.println("hi1");
                 break;
             }
             for(Edge edge: current.adjacency){
                 City neighbour = edge.destination;
                 double dist = edge.dist;
                 double new_dist = current.g_dist+dist;
-                System.out.println("hi aish");
                 System.out.println(new_dist +" " + neighbour.g_dist );
                 if(new_dist<=neighbour.g_dist){
-                	System.out.println("hi srijan");
                     neighbour.parentCity=current;
                     neighbour.g_dist=new_dist;
                     //finaldist+=new_dist;
