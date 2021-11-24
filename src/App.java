@@ -177,18 +177,18 @@ public class App {
        try{
        double res1 = first_dist.searchAStar(allCities.get(cities[0]), allCities.get(cities[1]), allCities);
        JOptionPane.showMessageDialog(null,res1,"SHORTEST DISTANCE USING A* ALGORITHM",JOptionPane.PLAIN_MESSAGE);
-       JOptionPane.showMessageDialog(null,first_dist.arraypath.toString(),"PATH USING A* ALGORITHM",JOptionPane.PLAIN_MESSAGE);
        }
-       catch (InvalidCityException e){
-           //Message for City does not exist.
+       catch (Exception e){
+           //We need to show message - City does not exist. Add kar dena
+           JOptionPane.showMessageDialog(null,"City does not exist");
        }
        try{
        double res2 = second_dist.searchDijkstra(allCities.get(cities[0]), allCities.get(cities[1]), allCities);
        JOptionPane.showMessageDialog(null,res2,"SHORTEST DISTANCE USING DIJKSTRA ALGORITHM",JOptionPane.PLAIN_MESSAGE);
-       JOptionPane.showMessageDialog(null,second_dist.arraypath.toString(),"PATH USING DIJKSTRA ALGORITHM",JOptionPane.PLAIN_MESSAGE);
        }
-       catch (InvalidCityException e){
-        //Message for City does not exist.
+       catch (Exception e){
+        //We need to show message - City does not exist.
+        JOptionPane.showMessageDialog(null,"City does not exist");
     }
     }
    
