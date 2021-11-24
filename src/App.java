@@ -57,6 +57,7 @@ class A_star{
         if(!allCities.contains(source) || !allCities.contains(dest)){
             throw new InvalidCityException();
         }
+        else{
         for(City town: allCities){
             town.setHdist(dest);
         }
@@ -86,7 +87,7 @@ class A_star{
             }
             }
         }
-        return finaldist;
+        return finaldist;}
  
     }
 }
@@ -104,6 +105,7 @@ class Dijkstra{
         if(!allCities.contains(source) || !allCities.contains(dest)){
             throw new InvalidCityException();
         }
+        else{
         source.g_dist = 0;
         pathq.add(source);
         while(!pathq.isEmpty()){
@@ -127,8 +129,9 @@ class Dijkstra{
             }
  
     }
-    return finaldist;
-}}
+    return finaldist;}
+}
+}
  
 public class App {
     public static void main(String[] args) {
