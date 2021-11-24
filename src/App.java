@@ -2,6 +2,7 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+
 class City{
     double g_dist = Integer.MAX_VALUE;
     double h_dist;
@@ -38,6 +39,10 @@ class Edge {
         this.dist = dist;
     }
 }
+
+class InvalidCityException extends Exception{
+
+}
  
 class A_star{
     PriorityQueue<City> pathq = new PriorityQueue<>(new Comparator<City>() {
@@ -47,8 +52,11 @@ class A_star{
         }        
     });
     double finaldist = 0.0;
-    ArrayList<City> arraypath = new ArrayList<City>();
-    public double searchAStar(City source, City dest, ArrayList<City> allCities){
+    ArrayList<Integer> arraypath = new ArrayList<Integer>();
+    public double searchAStar(City source, City dest, ArrayList<City> allCities) throws InvalidCityException{
+        if(!allCities.contains(source) || !allCities.contains(dest)){
+            throw new InvalidCityException();
+        }
         for(City town: allCities){
             town.setHdist(dest);
         }
@@ -58,8 +66,6 @@ class A_star{
         while(!pathq.isEmpty()){
             City current = pathq.poll();
             finaldist = current.g_dist;
-            /*Storing IDs for printing path*/
-            arraypath.add(current);
             if(current.id==dest.id){
                 break;
             }
@@ -72,7 +78,6 @@ class A_star{
                     neighbour.parentCity = current;
                     neighbour.g_dist = new_g_dist;
                     neighbour.f_dist = new_f_dist;
-                    //finaldist +=new_g_dist;
                
                 if(pathq.contains(neighbour)){
                     pathq.remove(neighbour);
@@ -94,15 +99,16 @@ class Dijkstra{
         }        
     });
   double finaldist = 0.0;
-  ArrayList<City> arraypath = new ArrayList<City>();
-    public double searchDijkstra(City source, City dest){
+    ArrayList<Integer> arraypath = new ArrayList<Integer>();
+    public double searchDijkstra(City source, City dest, ArrayList<City> allCities) throws InvalidCityException{
+        if(!allCities.contains(source) || !allCities.contains(dest)){
+            throw new InvalidCityException();
+        }
         source.g_dist = 0;
         pathq.add(source);
         while(!pathq.isEmpty()){
             City current = pathq.poll();
             finaldist = current.g_dist;
-            /*Storing IDs for printing path*/
-            arraypath.add(current);
             if(current.id==dest.id){
                 break;
             }
@@ -110,11 +116,9 @@ class Dijkstra{
                 City neighbour = edge.destination;
                 double dist = edge.dist;
                 double new_dist = current.g_dist+dist;
-                System.out.println(new_dist +" " + neighbour.g_dist );
                 if(new_dist<=neighbour.g_dist){
                     neighbour.parentCity=current;
                     neighbour.g_dist=new_dist;
-                    //finaldist+=new_dist;
                     if(pathq.contains(neighbour)){
                         pathq.remove(neighbour);
                     }
@@ -123,45 +127,43 @@ class Dijkstra{
             }
  
     }
-        System.out.println(finaldist);
     return finaldist;
 }}
-
+ 
 public class App {
-	public static void main(String[] args) {
+    public static void main(String[] args) {
       ArrayList<City> allCities = new ArrayList<>();
       int x0 = Integer.parseInt(JOptionPane.showInputDialog("Enter number of cities").trim());
       for(int m=0; m<x0; m++) {
-    	  allCities.add(new City(m));
+          allCities.add(new City(m));
       }
       String city[]= new String[3];
       int cities[] = new int[3];
-      
+     
       int i = Integer.parseInt(JOptionPane.showInputDialog("Enter number of connections"));
        //JOptionPane.showMessageDialog(null,"Thanks for the response");
        for(int j=0;j<i;j++)
        {
-    	   String s1 = JOptionPane.showInputDialog("Enter two city names and the distance between them");
-    	   city = s1.split(" ");
-    	   //System.out.print(city[j]+" ");
-    	   for(int x=0;x<3;x++) {
-    		   cities[x] = Integer.parseInt(city[x].trim());
-    	   }
-    	   allCities.get(cities[0]).addNeigh(allCities.get(cities[1]), cities[2]);
+           String s1 = JOptionPane.showInputDialog("Enter two city names and the distance between them");
+           city = s1.split(" ");
+           for(int x=0;x<3;x++) {
+               cities[x] = Integer.parseInt(city[x].trim());
+           }
+           allCities.get(cities[0]).addNeigh(allCities.get(cities[1]), cities[2]);
        }
-      
+     
        //JOptionPane.showMessageDialog(null,"Thanks for the response");
  
        for(int k=0;k<x0;k++) {
        String s2 = JOptionPane.showInputDialog("Enter city followed by coordinates");
        city = s2.split(" ");
-	   for(int x=0;x<3;x++) {
-		   cities[x] = Integer.parseInt(city[x].trim());
-	   }
-	   allCities.get(cities[0]).setCoord(cities[1], cities[2]); 
+       for(int x=0;x<3;x++) {
+           cities[x] = Integer.parseInt(city[x].trim());
+       }
+       allCities.get(cities[0]).setCoord(cities[1], cities[2]);
        }
        
-      
+     
        String s3 = JOptionPane.showInputDialog("Enter the two cities between which you need to get the shortest distance");
        JOptionPane.showMessageDialog(null,"Thanks for the response");
        A_star first_dist = new A_star();
@@ -169,13 +171,22 @@ public class App {
        city = s3.split(" ");
        cities[0] = Integer.parseInt(city[0]);
        cities[1] = Integer.parseInt(city[1]);
-       
+       try{
        double res1 = first_dist.searchAStar(allCities.get(cities[0]), allCities.get(cities[1]), allCities);
-       double res2 = second_dist.searchDijkstra(allCities.get(cities[0]), allCities.get(cities[1]));
        JOptionPane.showMessageDialog(null,res1,"SHORTEST DISTANCE USING A* ALGORITHM",JOptionPane.PLAIN_MESSAGE);
+       JOptionPane.showMessageDialog(null,first_dist.arraypath.toString(),"PATH USING A* ALGORITHM",JOptionPane.PLAIN_MESSAGE);
+       }
+       catch (InvalidCityException e){
+           //Message for City does not exist.
+       }
+       try{
+       double res2 = second_dist.searchDijkstra(allCities.get(cities[0]), allCities.get(cities[1]), allCities);
        JOptionPane.showMessageDialog(null,res2,"SHORTEST DISTANCE USING DIJKSTRA ALGORITHM",JOptionPane.PLAIN_MESSAGE);
-	}
-	
+       JOptionPane.showMessageDialog(null,second_dist.arraypath.toString(),"PATH USING DIJKSTRA ALGORITHM",JOptionPane.PLAIN_MESSAGE);
+       }
+       catch (InvalidCityException e){
+        //Message for City does not exist.
+    }
+    }
+   
 }
-
-
