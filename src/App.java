@@ -52,7 +52,6 @@ class A_star{
         }        
     });
     double finaldist = 0.0;
-    ArrayList<Integer> arraypath = new ArrayList<Integer>();
     public double searchAStar(City source, City dest, ArrayList<City> allCities) throws InvalidCityException{
         if(!allCities.contains(source) || !allCities.contains(dest)){
             throw new InvalidCityException();
@@ -100,7 +99,6 @@ class Dijkstra{
         }        
     });
   double finaldist = 0.0;
-    ArrayList<Integer> arraypath = new ArrayList<Integer>();
     public double searchDijkstra(City source, City dest, ArrayList<City> allCities) throws InvalidCityException{
         if(!allCities.contains(source) || !allCities.contains(dest)){
             throw new InvalidCityException();
